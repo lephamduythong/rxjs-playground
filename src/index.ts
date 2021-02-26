@@ -1,75 +1,68 @@
-import './styles/style.scss';
-import { gsap, Linear } from 'gsap'
-import { CustomEase } from 'gsap/CustomEase'
+import "./styles/style.scss";
+import "./index.js";
+import { Observable } from "rxjs";
+import { audit, auditTime, catchError, map, take } from "rxjs/operators";
 
-gsap.registerPlugin(CustomEase)
+const btn1 = document.getElementById("btn1") as HTMLButtonElement;
+const btn2 = document.getElementById("btn2") as HTMLButtonElement;
+const btn3 = document.getElementById("btn3") as HTMLButtonElement;
+const btn4 = document.getElementById("btn4") as HTMLButtonElement;
+const btn5 = document.getElementById("btn5") as HTMLButtonElement;
 
-// CustomEase.create("clgt", "M0,0 C0.128,0.572 0.521,1.082 0.776,1.156 0.842,1.175 0.919,1.152 0.944,1.144 1.014,1.118 0.93,1 1,1 ")
-
-document.getElementById('btn').addEventListener('click', _ => {
-    gsap.to('#sun', { 
-        duration: 10, 
-        rotation: "360",
-        repeat: -1,
-        ease: Linear.easeNone,
-        transformOrigin:"50% 50%" 
-    })
-})
-
-
-/*
-import './styles/style.scss';
-import { startConnection } from './app/wsconnection'
-import { activeListenersAsync } from './app/wsinvoke'
-import { activeCallbacksAsync } from './app/wscallback'
-import { delay } from './app/ulti'
-import { Constant } from './app/const'
-
-function parseStyleClasses() {
-    let html = document.documentElement.innerHTML.toString()
-    html = html.replace(Constant.StyleClass.CLGT, 'red-text')
-    html = html.replace('@@title@@', 'Vãi đái')
-    let parser = new DOMParser()
-    let parsedHTML = parser.parseFromString(html, 'text/html')
-    document.body = parsedHTML.body
-    document.head.innerHTML = parsedHTML.head.innerHTML.toString()
+function stdSub<T>(obs: Observable<T>): void {
+  obs.subscribe(
+    (result) => console.log("Result: " + result),
+    (error) => console.log("Error: " + error),
+    () => console.log("Completed")
+  );
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    parseStyleClasses()
-    let popupContainer = document.getElementsByClassName('tl-popup-container')
-    let popup = document.getElementsByClassName('tl-popup')
-    popupContainer[0].classList.remove('tl-hidden')
-    await delay(10)
-    popup[0].classList.add('tl-popup-open')
-    popup[0].classList.remove('tl-popup-close')
-    await delay(2000)
-    let t1 = activeListenersAsync()
-    let t2 = activeCallbacksAsync()
-    await Promise.all([t1, t2])
-    console.log('done')
-    startConnection()
-    popup[0].classList.remove('tl-popup-open')
-    popup[0].classList.add('tl-popup-close')
-    await delay(190)
-    document.getElementsByClassName('tl-popup-container')[0].classList.add('tl-hidden')
+function createClickObs(btn: HTMLButtonElement) {
+  return Observable.fromEvent(btn, "click");
+}
+
+// audit: btn1 click, sau đó btn2 click thì event click của btn1 mới hiệu lực
+/* const btn1$ = Observable.fromEvent(btn1, "click").audit(
+  (value) => btn2$
+);
+const btn2$ = Observable.fromEvent(btn2, "click");
+stdSub(btn1$); */
+
+// auditTime: btn1 click, sau 1s thì event click của btn1 mới hiệu lực
+/* const btn1$ = Observable.fromEvent(btn1, "click").auditTime(1);
+stdSub(btn1$);
+ */
+
+// buffer: click btn1 3 lần, lưu vào buffer, click btn2, show array gồm 3 cái event của btn1
+/* const btn1$ = createClickObs(btn1);
+const btn2$ = createClickObs(btn2);
+const buffered$ = btn1$.buffer(btn2$);
+stdSub(buffered$); */
+
+// bufferCount: click btn1 đúng 3 lần thì sau đó sẽ show array gồm 3 cái event của btn1
+/* const btn1$ = createClickObs(btn1);
+const buffered$ = btn1$.bufferCount(3);
+stdSub(buffered$); */
+
+// bufferTime: click btn1 5 lần trong 1s thì nó sẽ show array gồm 5 event của btn1
+/* const btn1$ = createClickObs(btn1);
+const buffered$ = btn1$.bufferTime(1000);
+stdSub(buffered$); */
+
+// bufferToggle:
+
+// bufferWhen:
+
+// catchError: bắt lỗi xảy ra khi đang xử lí trên obs, thay thế bằng obs mới, nếu throw lỗi trong catchError thì subscriber sẽ báo lỗi
+// catchError dùng tron pipe, nếu dùng ngoài thì ghi .catch
+/* const obs = Observable.of(1, 2, 3, 4, 5).map(value => {
+    if (value === 3) {
+        throw 'holy shit';
+    };
+    return value;
+}).catch((error, caught) => {
+    console.log(error); // holy shit
+    console.log(caught); // Obs
+    throw 'clgt'; // Error: clgt
 });
-*/
-
-// let btn = document.getElementById('btn')
-
-// btn.addEventListener('click', function () {
-//   document.getElementsByClassName('tl-popup-container')[0].classList.remove('tl-hidden')
-//   setTimeout(function () {
-//     document.getElementsByClassName('tl-popup')[0].classList.add('tl-popup-open')
-//     document.getElementsByClassName('tl-popup')[0].classList.remove('tl-popup-close')
-//   }, 1)
-// });
-
-// document.getElementsByClassName('tl-close-popup-btn')[0].addEventListener('click', function (e) {
-//   document.getElementsByClassName('tl-popup')[0].classList.remove('tl-popup-open')
-//   document.getElementsByClassName('tl-popup')[0].classList.add('tl-popup-close')
-//   setTimeout(function () {
-//     document.getElementsByClassName('tl-popup-container')[0].classList.add('tl-hidden')
-//   }, 190)
-// })
+stdSub(obs); */
