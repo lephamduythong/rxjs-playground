@@ -23,10 +23,17 @@ import { stdSub } from '../functions'
 stdSub(obs$); */
 
 // of: input dạng ...params
-const obs$ = Observable.of(1, 2, 3, 4);
-stdSub(obs$);
+/* const obs$ = Observable.of(1, 2, 3, 4);
+stdSub(obs$); */
 
-// create
+// create, tốt nhất dùng constructor Observable cho nó có intellisense trong typescript
+/* const obs$ = new Observable<number>(observer => {
+    observer.next(1);
+    observer.next(2);
+    // observer.error('Error'); // nếu error thì ko thể complete
+    observer.complete();
+})
+stdSub(obs$); */
 
 // defer
 
