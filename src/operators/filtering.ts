@@ -1,8 +1,4 @@
 import { Observable, Subject } from "rxjs";
-import { fromEvent } from "rxjs/observable/fromEvent";
-import { interval } from "rxjs/observable/interval";
-import { of } from "rxjs/observable/of";
-import { timer } from "rxjs/observable/timer";
 import { debounce, debounceTime, map } from "rxjs/operators";
 import { btn1 } from "../index";
 import { delay, stdSub } from "../functions";

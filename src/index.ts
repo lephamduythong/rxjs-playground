@@ -5,13 +5,11 @@ import "./styles/style.scss";
 // import './operators/multicasting';
 // import "./operators/filtering";
 // import './operators/transformation';
-import './operators/ultility';
+// import './operators/ultility';
 
-import { ConnectableObservable, Observable, Subject } from "rxjs";
-import { audit, auditTime, catchError, debounceTime, map, take } from "rxjs/operators";
+import { Observable, asyncScheduler } from "rxjs";
+import { observeOn } from "rxjs/operators";
 import { stdSub, createClickObs, delay } from "./functions";
-import { fromEvent } from "rxjs/observable/fromEvent";
-
 
 export const btn1 = document.getElementById("btn1") as HTMLButtonElement;
 export const btn2 = document.getElementById("btn2") as HTMLButtonElement;
@@ -53,4 +51,31 @@ subject.error('error cmnr');
 subject.complete();
 subject.next('nothing') // ko in ra do đã .complete() */
 
-// Scheduler
+// Scheduler: quy định phong cách chạy khi subscriber đăng ký theo dõi obs
+// asyncScheduler : bất đồng bộ
+const observable = new Observable((observer) => {
+  for (let i = 0; i < 100; i++) {
+    observer.next(i);
+  }
+  observer.complete();
+}).pipe(observeOn(asyncScheduler)); // mấu cmn chốt ở đây
+
+console.log("just before subscribe");
+observable.subscribe({
+  // chạy async ngay, ko cần phải đợi subscribe xong rồi mới in "just after subscribe"
+  next(x) {
+    console.log("got value " + x);
+  },
+  error(err) {
+    console.error("something wrong occurred: " + err);
+  },
+  complete() {
+    console.log("done");
+  },
+});
+console.log("just after subscribe");
+
+// null (default): mặc định, tuần tự (sync)
+// queueScheduler: tuần tự theo hàng đợi First In First Out (FIFO)
+// asapScheduler:
+// animationFrameScheduler: dùng khi muốn animation smooth hơn

@@ -38,6 +38,6 @@
     "gsap": "npm:@gsap/member@^3.5.1",
     "leaflet": "^1.7.1",
     "normalize.css": "^8.0.1",
-    "rxjs": "^5.5.12"
+    "rxjs": "^6.6.6"
   }
 }

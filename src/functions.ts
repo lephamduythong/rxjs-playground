@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { fromEvent, Observable } from "rxjs";
 
 export function stdSub<T>(obs: Observable<T>, optionalText?: string) {
   optionalText = optionalText ? optionalText : "";
@@ -11,7 +11,7 @@ export function stdSub<T>(obs: Observable<T>, optionalText?: string) {
 }
 
 export function createClickObs(btn: HTMLButtonElement) {
-  return Observable.fromEvent(btn, "click");
+  return fromEvent(btn, "click");
 }
 
 export function delay(ms: number) {

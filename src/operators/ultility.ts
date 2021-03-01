@@ -1,6 +1,5 @@
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { tap } from "rxjs/operators/tap";
 import { stdSub } from "../functions";
 
 // tap / do: dùng để tạo side effect cho việc debug, theo dõi giá trị mỗi lần dc bắn ra ở mỗi bước xử lí mà việc console.log ở subsciber ko thể theo dõi được
